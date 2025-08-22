@@ -1,0 +1,8 @@
+{
+  "version": "1.0.0",
+  "debug": false,
+  "store_name": "Kassensystem",
+  "currency": "€",
+  "auto_save_receipts": true,
+  "auto_save_logs": false
+}
