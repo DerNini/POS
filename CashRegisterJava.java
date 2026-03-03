@@ -507,8 +507,35 @@ public class CashRegisterJava {
             buildCashier();
             buildInventory();
             buildReports();
+            buildPlaceholderPanel("daily_close", "Tagesabschluss", "Tagesabschluss-Ansicht (Java-Version).");
+            buildPlaceholderPanel("master_data", "Stammdaten", "Stammdaten-Verwaltung (Java-Version).");
+            buildPlaceholderPanel("tax_admin", "Steuerverwaltung", "Steuerverwaltung (Java-Version).");
+            buildPlaceholderPanel("technik", "Technik", "Technik-Einstellungen (Java-Version).");
+            buildPlaceholderPanel("cash_management", "Geldwirtschaft", "Tresor-/Schubladenverwaltung (Java-Version).");
+            buildPlaceholderPanel("journals", "Journale", "Journalübersicht (Java-Version).");
             refreshUsers();
             card.show(root, "login");
+        }
+
+        void buildPlaceholderPanel(String id, String title, String description) {
+            JPanel p = new JPanel(new BorderLayout());
+            JPanel center = new JPanel();
+            center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+            center.setBorder(new EmptyBorder(20,20,20,20));
+            JLabel h = new JLabel(title);
+            h.setAlignmentX(Component.LEFT_ALIGNMENT);
+            JLabel d = new JLabel(description);
+            d.setAlignmentX(Component.LEFT_ALIGNMENT);
+            JButton back = new JButton("Zurück");
+            back.setAlignmentX(Component.LEFT_ALIGNMENT);
+            back.addActionListener(e -> card.show(root, "menu"));
+            center.add(h);
+            center.add(Box.createVerticalStrut(10));
+            center.add(d);
+            center.add(Box.createVerticalStrut(20));
+            center.add(back);
+            p.add(center, BorderLayout.CENTER);
+            root.add(p, id);
         }
 
         void buildLogin() {
@@ -532,6 +559,25 @@ public class CashRegisterJava {
             JButton kasse = new JButton("Kasse");
             JButton war = new JButton("Warenwirtschaft");
             JButton ber = new JButton("Berichte");
+            JButton tagesabschluss = new JButton("Tagesabschluss");
+            JButton stammdaten = new JButton("Stammdaten");
+            JButton steuern = new JButton("Steuerverwaltung");
+            JButton technik = new JButton("Technik");
+            JButton geld = new JButton("Geldwirtschaft");
+            JButton journale = new JButton("Journale");
+            JButton logout = new JButton("Abmelden");
+            for (JButton x : List.of(kasse, war, ber, tagesabschluss, stammdaten, steuern, technik, geld, journale, logout)) {
+                x.setAlignmentX(Component.LEFT_ALIGNMENT); b.add(x); b.add(Box.createVerticalStrut(10));
+            }
+            kasse.addActionListener(e -> openCashier());
+            war.addActionListener(e -> { refreshProducts(); card.show(root, "inventory"); });
+            ber.addActionListener(e -> { refreshReports(); card.show(root, "reports"); });
+            tagesabschluss.addActionListener(e -> card.show(root, "daily_close"));
+            stammdaten.addActionListener(e -> card.show(root, "master_data"));
+            steuern.addActionListener(e -> card.show(root, "tax_admin"));
+            technik.addActionListener(e -> card.show(root, "technik"));
+            geld.addActionListener(e -> card.show(root, "cash_management"));
+            journale.addActionListener(e -> card.show(root, "journals"));
             JButton logout = new JButton("Abmelden");
             for (JButton x : List.of(kasse, war, ber, logout)) { x.setAlignmentX(Component.LEFT_ALIGNMENT); b.add(x); b.add(Box.createVerticalStrut(10)); }
             kasse.addActionListener(e -> openCashier());
