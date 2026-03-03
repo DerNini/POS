@@ -578,6 +578,11 @@ public class CashRegisterJava {
             technik.addActionListener(e -> card.show(root, "technik"));
             geld.addActionListener(e -> card.show(root, "cash_management"));
             journale.addActionListener(e -> card.show(root, "journals"));
+            JButton logout = new JButton("Abmelden");
+            for (JButton x : List.of(kasse, war, ber, logout)) { x.setAlignmentX(Component.LEFT_ALIGNMENT); b.add(x); b.add(Box.createVerticalStrut(10)); }
+            kasse.addActionListener(e -> openCashier());
+            war.addActionListener(e -> { refreshProducts(); card.show(root, "inventory"); });
+            ber.addActionListener(e -> { refreshReports(); card.show(root, "reports"); });
             logout.addActionListener(e -> logout());
             p.add(new JLabel("Hauptmenü"), BorderLayout.NORTH);
             p.add(b, BorderLayout.WEST);
