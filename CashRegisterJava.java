@@ -312,9 +312,19 @@ public class CashRegisterJava {
         }
 
         private void seedIfNeeded() {
-            if (state.cashiers.isEmpty()) {
+            if (!state.cashiers.containsKey("admin")) {
                 state.cashiers.put("admin", new Cashier("admin", "admin", "Admin", Role.ADMIN));
+            }
+            boolean hasPosUser = state.cashiers.values().stream().anyMatch(
+                    c -> c.role == Role.ADMIN || c.role == Role.KASSIERER || c.role == Role.FILIALLEITER
+            );
+            if (!hasPosUser) {
                 state.cashiers.put("1001", new Cashier("1001", "1234", "Kassierer 1", Role.KASSIERER));
+            }
+            boolean hasBackofficeUser = state.cashiers.values().stream().anyMatch(
+                    c -> c.role != Role.KASSIERER
+            );
+            if (!hasBackofficeUser) {
                 state.cashiers.put("1002", new Cashier("1002", "1234", "Filialleiter", Role.FILIALLEITER));
             }
             if (state.products.isEmpty()) {
@@ -610,10 +620,17 @@ public class CashRegisterJava {
 
         void refreshUsers() {
             userCombo.removeAllItems();
+            int added = 0;
             for (Cashier c : core.state.cashiers.values()) {
                 if (mode == Mode.POS && !(c.role == Role.ADMIN || c.role == Role.KASSIERER || c.role == Role.FILIALLEITER)) continue;
                 if (mode == Mode.BACKOFFICE && c.role == Role.KASSIERER) continue;
                 userCombo.addItem(c.id + " - " + c.name + " (" + c.role + ")");
+                added++;
+            }
+            if (added == 0) {
+                for (Cashier c : core.state.cashiers.values()) {
+                    userCombo.addItem(c.id + " - " + c.name + " (" + c.role + ")");
+                }
             }
         }
 
